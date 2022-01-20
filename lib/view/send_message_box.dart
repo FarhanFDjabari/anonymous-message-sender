@@ -21,14 +21,12 @@ class _SendMessageBoxState extends State<SendMessageBox> {
   late final TextEditingController _messageInput;
   String? dialCode;
   bool isValidate = false;
-  late PhoneNumber dialValue;
 
   @override
   void initState() {
     super.initState();
     _phoneNumberInput = TextEditingController();
     _messageInput = TextEditingController();
-    dialValue = PhoneNumber(isoCode: 'ID');
   }
 
   @override
@@ -85,125 +83,124 @@ class _SendMessageBoxState extends State<SendMessageBox> {
         width: widget.width,
         height: widget.height,
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            InternationalPhoneNumberInput(
-              textFieldController: _phoneNumberInput,
-              onInputChanged: (phoneNumber) {
-                dialValue = phoneNumber;
-                dialCode = phoneNumber.dialCode!.replaceAll('+', '');
-                inputValidateCheck();
-              },
-              searchBoxDecoration: InputDecoration(
-                focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.teal),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              InternationalPhoneNumberInput(
+                textFieldController: _phoneNumberInput,
+                onInputChanged: (phoneNumber) {
+                  dialCode = phoneNumber.dialCode!.replaceAll('+', '');
+                  inputValidateCheck();
+                },
+                searchBoxDecoration: InputDecoration(
+                  focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.teal),
+                  ),
+                  labelText: 'Search by country code or dial code',
+                  labelStyle: GoogleFonts.montserrat(
+                    color: Colors.teal,
+                  ),
                 ),
-                labelText: 'Search by country code or dial code',
-                labelStyle: GoogleFonts.montserrat(
-                  color: Colors.teal,
+                keyboardAction: TextInputAction.next,
+                selectorConfig: const SelectorConfig(
+                  selectorType: PhoneInputSelectorType.DIALOG,
                 ),
-              ),
-              keyboardAction: TextInputAction.next,
-              selectorConfig: const SelectorConfig(
-                selectorType: PhoneInputSelectorType.DIALOG,
-              ),
-              selectorTextStyle: GoogleFonts.montserrat(),
-              ignoreBlank: false,
-              autoValidateMode: AutovalidateMode.disabled,
-              initialValue: dialValue,
-              spaceBetweenSelectorAndTextField: 0,
-              formatInput: false,
-              cursorColor: Colors.teal,
-              keyboardType: const TextInputType.numberWithOptions(
-                signed: true,
-                decimal: true,
-              ),
-              autoFocus: false,
-              inputBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(
-                  color: Colors.transparent,
+                selectorTextStyle: GoogleFonts.montserrat(),
+                ignoreBlank: false,
+                autoValidateMode: AutovalidateMode.disabled,
+                formatInput: false,
+                cursorColor: Colors.teal,
+                keyboardType: const TextInputType.numberWithOptions(
+                  signed: true,
+                  decimal: true,
                 ),
-              ),
-              inputDecoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.teal.shade100,
-                enabledBorder: OutlineInputBorder(
+                autoFocus: false,
+                inputBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(
                     color: Colors.transparent,
                   ),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(
-                    color: Colors.teal,
+                inputDecoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.teal.shade100,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                      color: Colors.transparent,
+                    ),
                   ),
-                ),
-                hintText: 'Phone Number',
-                hintStyle: GoogleFonts.montserrat(),
-              ),
-            ),
-            const SizedBox(height: 15),
-            TextField(
-              controller: _messageInput,
-              keyboardType: TextInputType.text,
-              onChanged: (value) {
-                inputValidateCheck();
-              },
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.teal.shade100,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(
-                    color: Colors.transparent,
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                      color: Colors.teal,
+                    ),
                   ),
+                  hintText: 'Phone Number',
+                  hintStyle: GoogleFonts.montserrat(),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(
-                    color: Colors.teal,
+              ),
+              const SizedBox(height: 15),
+              TextField(
+                controller: _messageInput,
+                keyboardType: TextInputType.text,
+                onChanged: (value) {
+                  inputValidateCheck();
+                },
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.teal.shade100,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                      color: Colors.transparent,
+                    ),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                      color: Colors.teal,
+                    ),
+                  ),
+                  labelText: 'Message',
+                  alignLabelWithHint: true,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  labelStyle: GoogleFonts.montserrat(),
                 ),
-                labelText: 'Message',
-                alignLabelWithHint: true,
-                floatingLabelBehavior: FloatingLabelBehavior.never,
-                labelStyle: GoogleFonts.montserrat(),
+                cursorColor: Colors.teal,
+                minLines: 8,
+                maxLines: 50,
               ),
-              cursorColor: Colors.teal,
-              minLines: 8,
-              maxLines: 50,
-            ),
-            const SizedBox(height: 15),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+              const SizedBox(height: 15),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  primary: Colors.teal.shade100,
+                  onPrimary: Colors.teal,
                 ),
-                primary: Colors.teal.shade100,
-                onPrimary: Colors.teal,
-              ),
-              onPressed: isValidate
-                  ? () {
-                      sendMessages(dialCode! + _phoneNumberInput.text,
-                          _messageInput.text);
-                    }
-                  : null,
-              child: SizedBox(
-                height: 46,
-                child: Center(
-                  child: Text(
-                    'Send Message',
-                    style: GoogleFonts.montserrat(
-                      color: ThemeData.light().hintColor,
+                onPressed: isValidate
+                    ? () {
+                        sendMessages(dialCode! + _phoneNumberInput.text,
+                            _messageInput.text);
+                      }
+                    : null,
+                child: SizedBox(
+                  height: 46,
+                  child: Center(
+                    child: Text(
+                      'Send Message',
+                      style: GoogleFonts.montserrat(
+                        color: ThemeData.light().hintColor,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
