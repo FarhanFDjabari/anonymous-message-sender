@@ -19,53 +19,60 @@ class _LandingPageState extends State<LandingPage> {
     final deviceHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        alignment: Alignment.center,
-        children: [
-          Lottie.asset(
-            'images/lottie-background.json',
-            fit: BoxFit.cover,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: deviceWidth < 780
-                  ? deviceHeight * 0.025
-                  : deviceHeight * 0.05,
-              horizontal:
-                  deviceWidth < 780 ? deviceWidth * 0.05 : deviceWidth * 0.25,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                EntranceFader(
-                  duration: const Duration(milliseconds: 250),
-                  offset: const Offset(0, -10),
-                  child: AdaptiveText(
-                    'Send WhatsApp Messages to Any Phone Number',
-                    style: GoogleFonts.montserrat(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 24,
+      body: SingleChildScrollView(
+        child: SizedBox(
+          width: deviceWidth,
+          height: deviceHeight,
+          child: Stack(
+            fit: StackFit.expand,
+            alignment: Alignment.center,
+            children: [
+              Lottie.asset(
+                'images/lottie-background.json',
+                fit: BoxFit.cover,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: deviceWidth < 780
+                      ? deviceHeight * 0.025
+                      : deviceHeight * 0.05,
+                  horizontal: deviceWidth < 780
+                      ? deviceWidth * 0.05
+                      : deviceWidth * 0.25,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    EntranceFader(
+                      duration: const Duration(milliseconds: 250),
+                      offset: const Offset(0, -10),
+                      child: AdaptiveText(
+                        'Send WhatsApp Messages to Any Phone Number',
+                        style: GoogleFonts.montserrat(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 24,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
+                    SizedBox(height: deviceHeight * 0.05),
+                    EntranceFader(
+                      duration: const Duration(milliseconds: 250),
+                      offset: const Offset(0, -10),
+                      delay: const Duration(milliseconds: 250),
+                      child: SendMessageBox(
+                        width: deviceWidth * 0.75,
+                        height: deviceHeight * 0.5,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: deviceHeight * 0.05),
-                EntranceFader(
-                  duration: const Duration(milliseconds: 250),
-                  offset: const Offset(0, -10),
-                  delay: const Duration(milliseconds: 250),
-                  child: SendMessageBox(
-                    width: deviceWidth * 0.75,
-                    height: deviceHeight * 0.5,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

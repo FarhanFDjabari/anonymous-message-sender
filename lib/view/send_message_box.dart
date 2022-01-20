@@ -21,12 +21,14 @@ class _SendMessageBoxState extends State<SendMessageBox> {
   late final TextEditingController _messageInput;
   String? dialCode;
   bool isValidate = false;
+  late PhoneNumber dialValue;
 
   @override
   void initState() {
     super.initState();
     _phoneNumberInput = TextEditingController();
     _messageInput = TextEditingController();
+    dialValue = PhoneNumber(isoCode: 'ID');
   }
 
   @override
@@ -89,6 +91,7 @@ class _SendMessageBoxState extends State<SendMessageBox> {
             InternationalPhoneNumberInput(
               textFieldController: _phoneNumberInput,
               onInputChanged: (phoneNumber) {
+                dialValue = phoneNumber;
                 dialCode = phoneNumber.dialCode!.replaceAll('+', '');
                 inputValidateCheck();
               },
@@ -108,7 +111,8 @@ class _SendMessageBoxState extends State<SendMessageBox> {
               selectorTextStyle: GoogleFonts.montserrat(),
               ignoreBlank: false,
               autoValidateMode: AutovalidateMode.disabled,
-              initialValue: PhoneNumber(isoCode: 'ID'),
+              initialValue: dialValue,
+              spaceBetweenSelectorAndTextField: 0,
               formatInput: false,
               cursorColor: Colors.teal,
               keyboardType: const TextInputType.numberWithOptions(
