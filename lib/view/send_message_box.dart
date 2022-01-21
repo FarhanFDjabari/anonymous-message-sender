@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -51,18 +49,7 @@ class _SendMessageBoxState extends State<SendMessageBox> {
   }
 
   sendMessages(String phoneNumber, String message) async {
-    String sendUrl;
-
-    if (kIsWeb) {
-      sendUrl = "https://wa.me/$phoneNumber/?text=${Uri.parse(message)}";
-    } else {
-      if (Platform.isAndroid) {
-        sendUrl =
-            "whatsapp://send?phone=$phoneNumber&text=${Uri.parse(message)}";
-      } else {
-        sendUrl = "https://wa.me/$phoneNumber/?text=${Uri.parse(message)}";
-      }
-    }
+    String sendUrl = "https://wa.me/$phoneNumber/?text=${Uri.parse(message)}";
 
     if (await canLaunch(sendUrl)) {
       await launch(sendUrl, forceSafariVC: false);
