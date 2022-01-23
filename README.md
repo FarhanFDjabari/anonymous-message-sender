@@ -1,4 +1,5 @@
 # anonymous_send_wa
+[![Codemagic build status](https://api.codemagic.io/apps/61e9574e4d0eb9310877c131/61e9574e4d0eb9310877c130/status_badge.svg)](https://codemagic.io/apps/61e9574e4d0eb9310877c131/61e9574e4d0eb9310877c130/latest_build)
 
 A new Flutter project to send whatsapp message without adding new number.
 
