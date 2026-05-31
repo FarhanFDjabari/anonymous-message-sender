@@ -1,10 +1,13 @@
-import 'package:anonymous_send_wa/view/send_message_box.dart';
+import 'package:anonymous_send_wa/theme/app_theme.dart';
+import 'package:anonymous_send_wa/view/message_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Widget _wrap() => const MaterialApp(
-      home: Scaffold(
-        body: SendMessageBox(width: 400, height: 600),
+Widget _wrap() => MaterialApp(
+      theme: AppTheme.light(),
+      darkTheme: AppTheme.dark(),
+      home: const Scaffold(
+        body: MessageForm(),
       ),
     );
 
