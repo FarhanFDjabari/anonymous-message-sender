@@ -107,5 +107,37 @@ void main() {
       completer.complete(true);
       await tester.pumpAndSettle();
     });
+
+    testWidgets('keeps the selected country after a rebuild (not reset to US)',
+        (tester) async {
+      // Regression: a fresh PhoneNumber initialValue on every build made the
+      // package reset the picked country to the default on each keystroke.
+      Uri? launchedUrl;
+      await tester.pumpWidget(
+        _wrapForm(launcher: (url) async {
+          launchedUrl = url;
+          return true;
+        }),
+      );
+      await tester.pumpAndSettle();
+
+      // Open the country selector and pick Indonesia (+62).
+      await tester.tap(find.byKey(const Key('intl_dropdown_key')));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+        find.byKey(const Key('intl_search_input_key')),
+        'Indonesia',
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('intl_country_ID_key')));
+      await tester.pumpAndSettle();
+
+      // Filling fields triggers rebuilds that previously snapped back to US.
+      await _fillValidForm(tester);
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
+
+      expect(launchedUrl?.path, startsWith('/62'));
+    });
   });
 }

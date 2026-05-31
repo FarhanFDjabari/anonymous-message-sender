@@ -25,6 +25,13 @@ class MessageForm extends StatefulWidget {
 class _MessageFormState extends State<MessageForm> {
   late final TextEditingController _phoneNumberController;
   late final TextEditingController _messageController;
+
+  // Built once and reused: InternationalPhoneNumberInput resets the selected
+  // country whenever `initialValue` changes identity, and PhoneNumber assigns
+  // a random hash per instance, so a fresh instance on every rebuild would snap
+  // the picker back to this country on every keystroke.
+  final PhoneNumber _initialCountry = PhoneNumber(isoCode: 'US');
+
   String? _dialCode;
   bool _isFormValid = false;
   bool _isSending = false;
@@ -104,7 +111,7 @@ class _MessageFormState extends State<MessageForm> {
             // Phone number input
             InternationalPhoneNumberInput(
               textFieldController: _phoneNumberController,
-              initialValue: PhoneNumber(isoCode: 'US'),
+              initialValue: _initialCountry,
               onInputChanged: (phoneNumber) {
                 _dialCode = phoneNumber.dialCode?.replaceAll('+', '');
                 _updateFormValidity();
