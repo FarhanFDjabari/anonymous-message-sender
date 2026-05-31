@@ -1,4 +1,6 @@
-import 'package:anonymous_send_wa/view/landing_page.dart';
+import 'package:anonymous_send_wa/providers/theme_controller.dart';
+import 'package:anonymous_send_wa/theme/app_theme.dart';
+import 'package:anonymous_send_wa/view/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -6,16 +8,21 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Anonymous Message Sender',
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-      ),
-      home: const LandingPage(),
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeController,
+      builder: (context, themeMode, _) {
+        return MaterialApp(
+          title: 'QuickSend',
+          theme: AppTheme.light(),
+          darkTheme: AppTheme.dark(),
+          themeMode: themeMode,
+          home: const HomePage(),
+        );
+      },
     );
   }
 }

@@ -7,6 +7,7 @@ class EntranceFader extends StatefulWidget {
   final Offset offset;
 
   const EntranceFader({
+    super.key,
     this.child,
     this.delay = const Duration(milliseconds: 0),
     this.duration = const Duration(milliseconds: 400),
@@ -34,7 +35,7 @@ class EntranceFaderState extends State<EntranceFader>
     _dyAnimation =
         Tween(begin: widget.offset.dy, end: 0.0).animate(_controller);
     Future.delayed(widget.delay, () {
-      if (this.mounted) {
+      if (mounted) {
         _controller.forward();
       }
     });
