@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:anonymous_send_wa/utils/whatsapp_url.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -7,11 +7,10 @@ import 'package:url_launcher/url_launcher.dart';
 class SendMessageBox extends StatefulWidget {
   final double width;
   final double height;
-  const SendMessageBox({Key? key, required this.width, required this.height})
-      : super(key: key);
+  const SendMessageBox({super.key, required this.width, required this.height});
 
   @override
-  _SendMessageBoxState createState() => _SendMessageBoxState();
+  State<SendMessageBox> createState() => _SendMessageBoxState();
 }
 
 class _SendMessageBoxState extends State<SendMessageBox> {
@@ -34,28 +33,29 @@ class _SendMessageBoxState extends State<SendMessageBox> {
     super.dispose();
   }
 
-  inputValidateCheck() {
-    if (dialCode!.isNotEmpty &&
-        _phoneNumberInput.text.isNotEmpty &&
-        _messageInput.text.isNotEmpty) {
-      setState(() {
-        isValidate = true;
-      });
-    } else {
-      setState(() {
-        isValidate = false;
-      });
-    }
+  void inputValidateCheck() {
+    setState(() {
+      isValidate = (dialCode?.isNotEmpty ?? false) &&
+          _phoneNumberInput.text.isNotEmpty &&
+          _messageInput.text.isNotEmpty;
+    });
   }
 
-  sendMessages(String phoneNumber, String message) async {
-    String sendUrl = "https://wa.me/$phoneNumber/?text=${Uri.parse(message)}";
+  Future<void> sendMessages(String message) async {
+    final sendUrl = buildWhatsAppUrl(
+      dialCode: dialCode ?? '',
+      phoneNumber: _phoneNumberInput.text,
+      message: message,
+    );
 
-    if (await canLaunch(sendUrl)) {
-      await launch(sendUrl, forceSafariVC: false);
-    } else {
+    final launched = await launchUrl(
+      sendUrl,
+      mode: LaunchMode.externalApplication,
+    );
+
+    if (!launched && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("WhatsApp is not installed")));
+          const SnackBar(content: Text("Could not open WhatsApp")));
     }
   }
 
@@ -165,15 +165,11 @@ class _SendMessageBoxState extends State<SendMessageBox> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  primary: Colors.teal.shade100,
-                  onPrimary: Colors.teal,
+                  backgroundColor: Colors.teal.shade100,
+                  foregroundColor: Colors.teal,
                 ),
-                onPressed: isValidate
-                    ? () {
-                        sendMessages(dialCode! + _phoneNumberInput.text,
-                            _messageInput.text);
-                      }
-                    : null,
+                onPressed:
+                    isValidate ? () => sendMessages(_messageInput.text) : null,
                 child: SizedBox(
                   height: 46,
                   child: Center(
